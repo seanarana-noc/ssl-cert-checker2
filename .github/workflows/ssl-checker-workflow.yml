@@ -22,10 +22,12 @@ jobs:
   - name: Check out repository
     uses: actions/checkout@v4
 
-  - name: Setup SSH private key for Git access
-    uses: webfactory/ssh-agent@v0.9.1
-      with:
-      ssh-private-key: ${{ secrets.ACTIONS_SSH_KEY }}
+      - name: Setup SSH private key for Git access
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          # This line requires two more spaces of indentation 
+          # to be correctly nested under 'with:'.
+          ssh-private-key: ${{ secrets.ACTIONS_SSH_KEY }}
 
       - name: Setup Swift Tools
         run: |
