@@ -9,8 +9,7 @@ jobs:
   test-streaming-job:
     runs-on: ubuntu-latest
     env:
-      GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no' # ADD THIS LINE
-      # ----------------------------------------------------
+      GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no' 
       NTRIP_USERNAME: ${{ secrets.NTRIP_USERNAME }}
       NTRIP_PASSWORD: ${{ secrets.NTRIP_PASSWORD }}
       
@@ -18,16 +17,17 @@ jobs:
       SWIFT_TOOLS_URL: "https://github.com/shahrzadshariati/Convert-Stream-RTCM-to-JSON/releases/download/v1.0.0-tools/swift-cli-v0.20.0-x86_64-unknown-linux-musl.tar.gz"
       EXPECTED_FILE_SIZE: 44397837 
 
-  steps:
-  - name: Check out repository
-    uses: actions/checkout@v4
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
 
+      # --- CORRECTED STEP STARTING AT LINE 25 ---
       - name: Setup SSH private key for Git access
         uses: webfactory/ssh-agent@v0.9.1
         with:
-          # This line requires two more spaces of indentation 
-          # to be correctly nested under 'with:'.
+          # This line requires two more spaces than 'with:'
           ssh-private-key: ${{ secrets.ACTIONS_SSH_KEY }}
+      # -------------------------------------------
 
       - name: Setup Swift Tools
         run: |
@@ -43,7 +43,7 @@ jobs:
           mkdir -p $HOME/swift-tools
           tar -xzf swift-tools.tar.gz -C $HOME/swift-tools
           
-          echo "$HOME/swift-tools" >> $GITHUB_PATH
+          echo "$HOME/swift-tools" >> "$GITHUB_PATH"
           echo "Tools are ready."
       # --- This step needs to contain the protocol fix ---
       - name: GitHub CLI Non-Interactive Login 🔑
