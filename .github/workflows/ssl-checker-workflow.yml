@@ -4,9 +4,8 @@ on:
   push:
     branches:
       - main
-
-jobs:
-  test-streaming-job:
+jobs:               # <-- NO SPACES HERE
+  test-streaming-job: # <-- Indent 2 spaces here
     runs-on: ubuntu-latest
     env:
       NTRIP_USERNAME: ${{ secrets.NTRIP_USERNAME }}
