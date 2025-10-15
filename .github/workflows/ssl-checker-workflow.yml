@@ -9,9 +9,8 @@ jobs:
   test-streaming-job:
     runs-on: ubuntu-latest
     env:
-      # --- Add this line to force SSH protocol globally ---
-      # This is executed before any code checkout or package download
-      GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no'
+      GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no' # ADD THIS LINE
+      # ... (rest of env variables)
       # ----------------------------------------------------
       NTRIP_USERNAME: ${{ secrets.NTRIP_USERNAME }}
       NTRIP_PASSWORD: ${{ secrets.NTRIP_PASSWORD }}
@@ -20,11 +19,17 @@ jobs:
       SWIFT_TOOLS_URL: "https://github.com/shahrzadshariati/Convert-Stream-RTCM-to-JSON/releases/download/v1.0.0-tools/swift-cli-v0.20.0-x86_64-unknown-linux-musl.tar.gz"
       EXPECTED_FILE_SIZE: 44397837 
 
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+  steps:
+  - name: Check out repository
+    uses: actions/checkout@v4
 
-      - name: Setup Swift Tools
+  - name: Setup SSH private key for Git access
+    uses: webfactory/ssh-agent@v0.9.1
+    with:
+      ssh-private-key: ${{ secrets.ACTIONS_SSH_KEY }}
+
+  - name: Setup Swift Tools
+    # ... (Your Swift setup script follows)
         run: |
           echo "### Downloading and installing Swift Tools... ###"
           curl -L -o swift-tools.tar.gz "${{ env.SWIFT_TOOLS_URL }}"
