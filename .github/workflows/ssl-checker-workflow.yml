@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no' # ADD THIS LINE
-      # ... (rest of env variables)
       # ----------------------------------------------------
       NTRIP_USERNAME: ${{ secrets.NTRIP_USERNAME }}
       NTRIP_PASSWORD: ${{ secrets.NTRIP_PASSWORD }}
@@ -28,8 +27,7 @@ jobs:
     with:
       ssh-private-key: ${{ secrets.ACTIONS_SSH_KEY }}
 
-  - name: Setup Swift Tools
-    # ... (Your Swift setup script follows)
+      - name: Setup Swift Tools
         run: |
           echo "### Downloading and installing Swift Tools... ###"
           curl -L -o swift-tools.tar.gz "${{ env.SWIFT_TOOLS_URL }}"
@@ -45,7 +43,6 @@ jobs:
           
           echo "$HOME/swift-tools" >> $GITHUB_PATH
           echo "Tools are ready."
-
       # --- This step needs to contain the protocol fix ---
       - name: GitHub CLI Non-Interactive Login 🔑
         env:
