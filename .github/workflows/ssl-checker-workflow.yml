@@ -37,28 +37,24 @@ jobs:
           echo "$HOME/swift-tools" >> $GITHUB_PATH
           echo "Tools are ready."
 
-      # --- NEW STEP: Non-Interactive GitHub CLI Login ---
+      # --- This step needs to contain the protocol fix ---
       - name: GitHub CLI Non-Interactive Login 🔑
         env:
           GITHUB_TOKEN: ${{ secrets.SECRETS_PAT }} 
         run: |
           echo "Authenticating GitHub CLI using PAT..."
-          # --- ADD THIS LINE ---
-          unset GITHUB_TOKEN  
-          # ---------------------
+          unset GITHUB_TOKEN
           echo "${{ env.GITHUB_TOKEN }}" | gh auth login --with-token
           echo "GitHub CLI successfully authenticated."
-
-          # --- ADD THIS NEW LINE ---
-          # Instructs the CLI to use SSH for cloning repos
+          
+          # --- MOVE THE FIX HERE ---
+          # This runs early enough to configure the environment before Swift resolves dependencies
           gh config set git_protocol ssh
-          echo "Configured git to use SSH protocol."
+          echo "Configured git to use SSH protocol for cloning."
           # -------------------------
 
-      # --- OLD STEP MODIFIED: Remove GITHUB_TOKEN ENV from here ---
+      # --- This step should only contain the streaming command ---
       - name: Run a 30-second Test Stream
-        # The 'env' block for GITHUB_TOKEN is REMOVED from this step
-        # as the CLI is already logged in globally for the runner.
         run: |
           echo "Attempting to connect, log in, and stream data..."
           set -o pipefail
