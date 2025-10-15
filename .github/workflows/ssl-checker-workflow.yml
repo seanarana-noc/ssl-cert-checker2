@@ -20,14 +20,24 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
- - name: Setup Swift Tools
+      - name: Setup Swift Tools
         run: |
           echo "### Downloading and installing Swift Tools... ###"
-          # ... (rest of the setup script remains the same)
+          curl -L -o swift-tools.tar.gz "${{ env.SWIFT_TOOLS_URL }}"
+          
+          ACTUAL_SIZE=$(wc -c < swift-tools.tar.gz)
+          if [ "$ACTUAL_SIZE" -ne "${{ env.EXPECTED_FILE_SIZE }}" ]; then
+            echo "Error: Downloaded file size is incorrect. Expected ${{ env.EXPECTED_FILE_SIZE }}, got $ACTUAL_SIZE."
+            exit 1
+          fi
+          
+          mkdir -p $HOME/swift-tools
+          tar -xzf swift-tools.tar.gz -C $HOME/swift-tools
+          
           echo "$HOME/swift-tools" >> $GITHUB_PATH
           echo "Tools are ready."
-          
-      # --- NEW STEP: Non-Interactive GitHub CLI Login ---
+
+# --- NEW STEP: Non-Interactive GitHub CLI Login ---
       - name: GitHub CLI Non-Interactive Login 🔑
         env:
           GITHUB_TOKEN: ${{ secrets.SECRETS_PAT }} # Use the PAT secret
