@@ -24,17 +24,6 @@ jobs:
           # Use your custom PAT secret to authenticate private repo access
           token: ${{ secrets.SECRETS_PAT }} 
 
-      # --- NEW STEP: Clone the Dependency ---
-      - name: Clone swift-nav/package-registry
-        run: |
-          # Use the GITHUB_TOKEN environment variable (set by the PAT in the checkout step)
-          # to authenticate the clone command.
-          git clone --depth 1 \
-            https://oauth2:${{ secrets.SECRETS_PAT }}@github.com/swift-nav/package-registry.git \
-            $HOME/swift-nav-dependency
-      # --------------------------------------
-
-
       - name: Setup Swift Tools
         run: |
           echo "### Downloading and installing Swift Tools... ###"
