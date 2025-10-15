@@ -49,6 +49,12 @@ jobs:
           echo "${{ env.GITHUB_TOKEN }}" | gh auth login --with-token
           echo "GitHub CLI successfully authenticated."
 
+          # --- ADD THIS NEW LINE ---
+          # Instructs the CLI to use SSH for cloning repos
+          gh config set git_protocol ssh
+          echo "Configured git to use SSH protocol."
+          # -------------------------
+
       # --- OLD STEP MODIFIED: Remove GITHUB_TOKEN ENV from here ---
       - name: Run a 30-second Test Stream
         # The 'env' block for GITHUB_TOKEN is REMOVED from this step
@@ -62,12 +68,6 @@ jobs:
             --url https://eu.l1l2.skylark.swiftnav.com:2102/SSR-integrity \
             --lat 52.149 \
             --lon 13.096 | swift rtcm32json > log.rtcm.json.test
-
-          # --- ADD THIS NEW LINE ---
-          # Instructs the CLI to use SSH for cloning repos
-          gh config set git_protocol ssh
-          echo "Configured git to use SSH protocol."
-          # -------------------------
 
       - name: Display Raw Log Content
         if: always()
