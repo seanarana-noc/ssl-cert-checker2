@@ -37,20 +37,9 @@ jobs:
           echo "$HOME/swift-tools" >> $GITHUB_PATH
           echo "Tools are ready."
 
-# --- NEW STEP: Non-Interactive GitHub CLI Login ---
-      - name: GitHub CLI Non-Interactive Login 🔑
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }} # Use the PAT secret
-        run: |
-          echo "Authenticating GitHub CLI using PAT..."
-          # This command uses the PAT to log in non-interactively
-          echo "${{ env.GITHUB_TOKEN }}" | gh auth login --with-token
-          echo "GitHub CLI successfully authenticated."
-
-      # --- OLD STEP MODIFIED: Remove GITHUB_TOKEN ENV from here ---
       - name: Run a 30-second Test Stream
-        # The 'env' block for GITHUB_TOKEN is REMOVED from this step
-        # as the CLI is already logged in globally for the runner.
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         run: |
           echo "Attempting to connect, log in, and stream data..."
           set -o pipefail
