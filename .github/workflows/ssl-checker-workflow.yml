@@ -9,6 +9,10 @@ jobs:
   test-streaming-job:
     runs-on: ubuntu-latest
     env:
+      # --- Add this line to force SSH protocol globally ---
+      # This is executed before any code checkout or package download
+      GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no'
+      # ----------------------------------------------------
       NTRIP_USERNAME: ${{ secrets.NTRIP_USERNAME }}
       NTRIP_PASSWORD: ${{ secrets.NTRIP_PASSWORD }}
       
@@ -46,12 +50,6 @@ jobs:
           unset GITHUB_TOKEN
           echo "${{ env.GITHUB_TOKEN }}" | gh auth login --with-token
           echo "GitHub CLI successfully authenticated."
-          
-          # --- MOVE THE FIX HERE ---
-          # This runs early enough to configure the environment before Swift resolves dependencies
-          gh config set git_protocol ssh
-          echo "Configured git to use SSH protocol for cloning."
-          # -------------------------
 
       # --- This step should only contain the streaming command ---
       - name: Run a 30-second Test Stream
