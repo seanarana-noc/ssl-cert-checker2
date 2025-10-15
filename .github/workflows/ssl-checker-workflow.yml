@@ -20,24 +20,10 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-
-      - name: Setup SSH private key for Git access
-        uses: webfactory/ssh-agent@v0.9.1
         with:
-          ssh-private-key: ${{ secrets.ACTIONS_SSH_KEY }}
+          # Use your custom PAT secret to allow access to private repos
+          token: ${{ secrets.SECRETS_PAT }} 
           
-      # --- RE-ADD THIS CRITICAL STEP ---
-      - name: GitHub CLI Non-Interactive Login 🔑
-        env:
-          GITHUB_TOKEN: ${{ secrets.SECRETS_PAT }} 
-        run: |
-          echo "Authenticating GitHub CLI using PAT..."
-          unset GITHUB_TOKEN
-          # Log in with the PAT token (provides HTTPS access)
-          echo "${{ env.GITHUB_TOKEN }}" | gh auth login --with-token
-          echo "GitHub CLI successfully authenticated."
-      # -----------------------------------
-
       - name: Setup Swift Tools
         run: |
           echo "### Downloading and installing Swift Tools... ###"
