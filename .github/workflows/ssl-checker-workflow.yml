@@ -24,7 +24,7 @@ jobs:
 
   - name: Setup SSH private key for Git access
     uses: webfactory/ssh-agent@v0.9.1
-    with:
+      with:
       ssh-private-key: ${{ secrets.ACTIONS_SSH_KEY }}
 
       - name: Setup Swift Tools
