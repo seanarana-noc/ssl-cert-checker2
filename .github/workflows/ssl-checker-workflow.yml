@@ -63,6 +63,12 @@ jobs:
             --lat 52.149 \
             --lon 13.096 | swift rtcm32json > log.rtcm.json.test
 
+          # --- ADD THIS NEW LINE ---
+          # Instructs the CLI to use SSH for cloning repos
+          gh config set git_protocol ssh
+          echo "Configured git to use SSH protocol."
+          # -------------------------
+
       - name: Display Raw Log Content
         if: always()
         run: |
