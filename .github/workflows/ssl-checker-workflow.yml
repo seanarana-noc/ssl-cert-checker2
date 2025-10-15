@@ -21,8 +21,10 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          # Use your custom PAT secret to allow access to private repos
+          # --- ADD THIS LINE ---
+          # Provide your custom PAT secret to authenticate against private repositories
           token: ${{ secrets.SECRETS_PAT }} 
+          # ---------------------
           
       - name: Setup Swift Tools
         run: |
