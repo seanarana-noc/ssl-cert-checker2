@@ -21,13 +21,22 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      # --- CORRECTED STEP STARTING AT LINE 25 ---
       - name: Setup SSH private key for Git access
         uses: webfactory/ssh-agent@v0.9.1
         with:
-          # This line requires two more spaces than 'with:'
           ssh-private-key: ${{ secrets.ACTIONS_SSH_KEY }}
-      # -------------------------------------------
+          
+      # --- RE-ADD THIS CRITICAL STEP ---
+      - name: GitHub CLI Non-Interactive Login 🔑
+        env:
+          GITHUB_TOKEN: ${{ secrets.SECRETS_PAT }} 
+        run: |
+          echo "Authenticating GitHub CLI using PAT..."
+          unset GITHUB_TOKEN
+          # Log in with the PAT token (provides HTTPS access)
+          echo "${{ env.GITHUB_TOKEN }}" | gh auth login --with-token
+          echo "GitHub CLI successfully authenticated."
+      # -----------------------------------
 
       - name: Setup Swift Tools
         run: |
