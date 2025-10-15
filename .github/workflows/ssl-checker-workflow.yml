@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - main
-jobs:               # <-- NO SPACES HERE
-  test-streaming-job: # <-- Indent 2 spaces here
+
+jobs:
+  test-streaming-job:
     runs-on: ubuntu-latest
     env:
       NTRIP_USERNAME: ${{ secrets.NTRIP_USERNAME }}
@@ -15,9 +16,9 @@ jobs:               # <-- NO SPACES HERE
       SWIFT_TOOLS_URL: "https://github.com/shahrzadshariati/Convert-Stream-RTCM-to-JSON/releases/download/v1.0.0-tools/swift-cli-v0.20.0-x86_64-unknown-linux-musl.tar.gz"
       EXPECTED_FILE_SIZE: 44397837 
 
-   steps:
+    steps:
       - name: Check out repository
-      uses: actions/checkout@v4  # <-- This is 2 spaces too far left (assuming 2-space indentation)
+        uses: actions/checkout@v4
 
       - name: Setup Swift Tools
         run: |
@@ -36,8 +37,8 @@ jobs:               # <-- NO SPACES HERE
           echo "$HOME/swift-tools" >> $GITHUB_PATH
           echo "Tools are ready."
 
-# --- NEW STEP: Non-Interactive GitHub CLI Login ---
-       - name: GitHub CLI Non-Interactive Login 🔑
+      # --- NEW STEP: Non-Interactive GitHub CLI Login ---
+      - name: GitHub CLI Non-Interactive Login 🔑
         env:
           GITHUB_TOKEN: ${{ secrets.SECRETS_PAT }} 
         run: |
