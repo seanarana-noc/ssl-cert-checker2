@@ -26,11 +26,14 @@ jobs:
           echo "### Downloading and installing Swift Tools... ###"
           curl -L -o swift-tools.tar.gz "${{ env.SWIFT_TOOLS_URL }}"
           
-          ACTUAL_SIZE=$(wc -c < swift-tools.tar.gz)
+          ACTUAL_SIZE=$(wc -c < swift-tools.tar.gz)     
+          # --- CORRECTED COMPARISON USING ENVIRONMENT VARIABLE ---
+          # Use the environment variable directly for a cleaner check
           if [ "$ACTUAL_SIZE" -ne "${{ env.EXPECTED_FILE_SIZE }}" ]; then
             echo "Error: Downloaded file size is incorrect. Expected ${{ env.EXPECTED_FILE_SIZE }}, got $ACTUAL_SIZE."
             exit 1
           fi
+          # --------------------------------------------------------
           
           mkdir -p $HOME/swift-tools
           tar -xzf swift-tools.tar.gz -C $HOME/swift-tools
