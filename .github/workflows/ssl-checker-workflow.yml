@@ -14,7 +14,7 @@ jobs:
       NTRIP_PASSWORD: ${{ secrets.NTRIP_PASSWORD }}
       
       # IMPORTANT: Make sure these two values are still correct!
-      SWIFT_TOOLS_URL: "https://github.com/swift-nav/swift-cli/releases/download/v0.20.0/swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz"
+      SWIFT_TOOLS_URL: "https://github.com/shahrzadshariati/Convert-Stream-RTCM-to-JSON/releases/download/v1.0.0-tools/swift-cli-v0.20.0-x86_64-unknown-linux-musl.tar.gz"
       EXPECTED_FILE_SIZE: 44397837 
 
     steps:
@@ -24,7 +24,7 @@ jobs:
       - name: Setup Swift Tools
         run: |
           # --- 1. THE DOWNLOAD COMMAND ---
-          curl -L -o swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz "${{ env.SWIFT_TOOLS_URL }}"
+          curl -L -o swift-cli-v0.20.0-x86_64-unknown-linux-musl.tar.gz "${{ env.SWIFT_TOOLS_URL }}"
           
           # 2. CHECK THE DOWNLOAD STATUS
           if [ $? -ne 0 ]; then
@@ -33,7 +33,7 @@ jobs:
           fi
 
           # 3. VERIFY SIZE AND INTEGRITY
-          ACTUAL_SIZE=$(wc -c < swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz)
+          ACTUAL_SIZE=$(wc -c < swift-cli-v0.20.0-x86_64-unknown-linux-musl.tar.gz)
           
           # Fix for Bash syntax error (using arithmetic comparison)
           if (( ACTUAL_SIZE != ${{ env.EXPECTED_FILE_SIZE }} )); then
@@ -42,14 +42,14 @@ jobs:
             # Optional: Display content if size is tiny (suggests an HTML error page)
             if (( ACTUAL_SIZE < 10000 )); then
               echo "--- Head of downloaded file (likely an error page) ---"
-              head -n 10 swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz
+              head -n 10 swift-cli-v0.20.0-x86_64-unknown-linux-musl.tar.gz
               echo "------------------------------------------------------"
             fi
             exit 1
           fi
 
           # 4. TEST DECOMPRESSION (Integrity Check)
-          if ! gunzip -t swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz &> /dev/null; then
+          if ! gunzip -t swift-cli-v0.20.0-x86_64-unknown-linux-musl.tar.gz &> /dev/null; then
             echo "Error: File is corrupted or not a valid gzip format."
             exit 1
           fi
@@ -58,7 +58,7 @@ jobs:
           
           # --- PROCEED WITH EXTRACTION AND PATH SETUP ---
           mkdir -p $HOME/swift-tools
-          tar -xf swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz -C $HOME/swift-tools
+          tar -xf swift-cli-v0.20.0-x86_64-unknown-linux-musl.tar.gz -C $HOME/swift-tools
           
           echo "$HOME/swift-tools" >> "$GITHUB_PATH"
           echo "Tools are ready."
