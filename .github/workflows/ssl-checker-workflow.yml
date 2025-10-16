@@ -14,7 +14,7 @@ jobs:
       NTRIP_PASSWORD: ${{ secrets.NTRIP_PASSWORD }}
       
       # IMPORTANT: Make sure these two values are still correct!
-      SWIFT_TOOLS_URL: "https://github.com/swift-nav/swift-cli/releases/download/v0.20.0/swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz"
+      SWIFT_TOOLS_URL: "https://github.com/seanarana-noc/ssl-cert-checker2/blob/main/swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz"
       EXPECTED_FILE_SIZE: 44397837 
 
     steps:
