@@ -26,7 +26,7 @@ jobs:
           echo "### Downloading and installing Swift Tools... ###"
           curl -L -o swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz "${{ env.SWIFT_TOOLS_URL }}"
           
-          ACTUAL_SIZE=$(wc -c < swift-tools.tar.gz)
+          ACTUAL_SIZE=$(wc -c < swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz)
           if [ "$ACTUAL_SIZE" -ne "${{ env.EXPECTED_FILE_SIZE }}" ]; then
             echo "Error: Downloaded file size is incorrect. Expected ${{ env.EXPECTED_FILE_SIZE }}, got $ACTUAL_SIZE."
             exit 1
