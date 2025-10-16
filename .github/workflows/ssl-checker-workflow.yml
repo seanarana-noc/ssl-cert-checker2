@@ -65,8 +65,8 @@ jobs:
           echo "[4/4] Attempting to connect, log in, and stream data..."
           # FIX 1: Changed -vv to the correct --verbose flag
           timeout 10s swift ntripping --verbose \
-            --username "${{ secrets.NTRIP_USERNAME }}" \
-            --password "${{ secrets.NTRIP_PASSWORD }}" \
+            --username "${{ env.NTRIP_USERNAME }}" \
+            --password "${{ env.NTRIP_PASSWORD }}" \
             --url https://eu.l1l2.skylark.swiftnav.com:2102/SSR-integrity \
             --lat 52.149 \
             --lon 13.096 | swift rtcm32json > log.rtcm.json.test
