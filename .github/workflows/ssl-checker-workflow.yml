@@ -40,7 +40,7 @@ jobs:
 
       - name: Run a 10-second Test Stream with Debugging
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.SECRETS_PAT }}
         run: |
           echo "[1/4] Starting debug checks..."
           set -o pipefail
