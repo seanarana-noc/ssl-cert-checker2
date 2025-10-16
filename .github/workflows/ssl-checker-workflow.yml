@@ -24,13 +24,18 @@ jobs:
       - name: Setup Swift Tools
         run: |
           echo "### Downloading and installing Swift Tools... ###"
-          # ... (download and file size check remains here)
+          curl -L -o swift-tools.tar.gz "${{ env.SWIFT_TOOLS_URL }}"
+          
+          ACTUAL_SIZE=$(wc -c < swift-tools.tar.gz)
+          if [ "$ACTUAL_SIZE" -ne "${{ env.EXPECTED_FILE_SIZE }}" ]; then
+            echo "Error: Downloaded file size is incorrect. Expected ${{ env.EXPECTED_FILE_SIZE }}, got $ACTUAL_SIZE."
+            exit 1
+          fi
           
           mkdir -p $HOME/swift-tools
-          tar -xzf swift-cli-v0.20.0-x86_64-unknown-linux-musl.tar.gz -C $HOME/swift-tools
+          tar -xzf swift-tools.tar.gz -C $HOME/swift-tools
           
-          # Add the tool's directory to the system PATH
-          echo "$HOME/swift-tools" >> "$GITHUB_PATH"
+          echo "$HOME/swift-tools" >> $GITHUB_PATH
           echo "Tools are ready."
 
           # --- VERIFICATION CHECKS ---
