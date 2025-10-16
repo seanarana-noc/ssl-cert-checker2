@@ -36,7 +36,7 @@ jobs:
           # --------------------------------------------------------
           
           mkdir -p $HOME/swift-tools
-          tar -xz swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz -C $HOME/swift-tools
+          tar -xf swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz -C $HOME/swift-tools
           
           echo "$HOME/swift-tools" >> $GITHUB_PATH
           echo "Tools are ready."
