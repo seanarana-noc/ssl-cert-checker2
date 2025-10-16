@@ -23,53 +23,44 @@ jobs:
 
       - name: Setup Swift Tools
         run: |
-          echo "### Downloading and installing Swift Tools... ###"
+          # --- 1. THE DOWNLOAD COMMAND ---
           curl -L -o swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz "${{ env.SWIFT_TOOLS_URL }}"
           
+          # 2. CHECK THE DOWNLOAD STATUS
+          if [ $? -ne 0 ]; then
+            echo "Error: curl download failed with exit code $?."
+            exit 1
+          fi
+
+          # 3. VERIFY SIZE AND INTEGRITY
           ACTUAL_SIZE=$(wc -c < swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz)
-          if [ "$ACTUAL_SIZE" -ne "${{ env.EXPECTED_FILE_SIZE }}" ]; then
+          
+          # Fix for Bash syntax error (using arithmetic comparison)
+          if (( ACTUAL_SIZE != ${{ env.EXPECTED_FILE_SIZE }} )); then
             echo "Error: Downloaded file size is incorrect. Expected ${{ env.EXPECTED_FILE_SIZE }}, got $ACTUAL_SIZE."
+          
+            # Optional: Display content if size is tiny (suggests an HTML error page)
+            if (( ACTUAL_SIZE < 10000 )); then
+              echo "--- Head of downloaded file (likely an error page) ---"
+              head -n 10 swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz
+              echo "------------------------------------------------------"
+            fi
+            exit 1
+          fi
+
+          # 4. TEST DECOMPRESSION (Integrity Check)
+          if ! gunzip -t swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz &> /dev/null; then
+            echo "Error: File is corrupted or not a valid gzip format."
             exit 1
           fi
           
-# --- 1. THE DOWNLOAD COMMAND (Ensure it's using the right name) ---
-curl -L -o swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz "${{ env.SWIFT_TOOLS_URL }}"
-
-# 2. CHECK THE DOWNLOAD STATUS
-if [ $? -ne 0 ]; then
-  echo "Error: curl download failed with exit code $?."
-  exit 1
-fi
-
-# 3. VERIFY SIZE AND INTEGRITY
-ACTUAL_SIZE=$(wc -c < swift-tools.tar.gz)
-
-# Fix for Bash syntax error (using arithmetic comparison)
-if (( ACTUAL_SIZE != ${{ env.EXPECTED_FILE_SIZE }} )); then
-  echo "Error: Downloaded file size is incorrect. Expected ${{ env.EXPECTED_FILE_SIZE }}, got $ACTUAL_SIZE."
-  # Optional: Display content if size is tiny (suggests an HTML error page)
-  if (( ACTUAL_SIZE < 10000 )); then
-    echo "--- Head of downloaded file (likely an error page) ---"
-    head -n 10 swift-tools.tar.gz
-    echo "------------------------------------------------------"
-  fi
-  exit 1
-fi
-
-# 4. TEST DECOMPRESSION (Integrity Check)
-if ! gunzip -t swift-tools.tar.gz &> /dev/null; then
-  echo "Error: File is corrupted or not a valid gzip format."
-  exit 1
-fi
-
-echo "Success: File size and format integrity verified."
-
-# --- Proceed to extraction: tar -xf swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz -C $HOME/swift-tools ---
-
+          echo "Success: File size and format integrity verified."
+          
+          # --- PROCEED WITH EXTRACTION AND PATH SETUP ---
           mkdir -p $HOME/swift-tools
           tar -xf swift-cli-v0.20.0-x86_64-apple-darwin.tar.gz -C $HOME/swift-tools
           
-          echo "$HOME/swift-tools" >> $GITHUB_PATH
+          echo "$HOME/swift-tools" >> "$GITHUB_PATH"
           echo "Tools are ready."
 
       - name: Run a 10-second Test Stream with Debugging
